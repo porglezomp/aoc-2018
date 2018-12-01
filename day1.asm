@@ -13,8 +13,6 @@ start:
     ;; We make it 8 bytes so we can use it with full width arithmetic.
     sub     rsp, 8
     mov     r12, rsp
-    ;; r15 holds the total so far
-    mov     r15, 0
 
 ;; Read a number starting with +/- from stdin
 read_num:
@@ -28,7 +26,7 @@ read_sign:
     syscall
     ;; If we reached EOF, go to output
     cmp     eax, 0
-    je      output
+    je      compute_sum
     ;; Store the sign in r13
     mov     r13, [r12]
 read_digit:
@@ -39,21 +37,30 @@ read_digit:
     syscall
     ;; If we see '\n', we can stop reading digits
     cmp     byte [r12], NEWLINE
-    je      add
+    je      read_done
     ;; r14 = r14 * 10 + (digit - '0')
     imul    r14, r14, 10
     add     r14, [r12]
     sub     r14, '0'
     jmp     read_digit
 
-;; Use the sign stored in r13 to maybe negate r14, then add to r15
-add:
+;; Store the number on the stack
+read_done:
     cmp     r13, '-'
     jne     skip_neg
     neg     r14
 skip_neg:
-    add     r15, r14
+    push    r14
     jmp     read_num
+
+;; Compute the sum!
+compute_sum:
+    mov     r15, 0
+add_num:
+    pop     r14
+    add     r15, r14
+    cmp     rsp, r12
+    jne     add_num
 
 ;; Print out the final result
 output:
