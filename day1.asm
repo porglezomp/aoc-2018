@@ -55,20 +55,24 @@ skip_neg:
 
 ;; Print out the final result
 output:
+    mov     rax, r15
+    call    output_number
+
+exit:
+    mov     rax, SYS_EXIT
+    mov     rdi, 0
+    syscall
+
+;; Prints the number it gets from rax to stdout
+output_number:
     ;; r14 stores the length of the output buffer
     mov     r14, 1
-    mov     rax, r15
-    cmp     rax, 0
-    mov     byte [rsp], NEWLINE
-    jl      output_negate
-    jne     output_digit
-    ;; If the value is 0, we need to print just 0
+    mov     r15, rax
     dec     rsp
-    mov     byte [rsp], '0'
-    inc     r14
-    jmp     output_write
-output_negate:
-    ;; We need to print a positive output
+    mov     byte [rsp], NEWLINE
+    cmp     rax, 0
+    jge     output_digit
+    ;; Ensure that rax is positive
     neg     rax
 output_digit:
     ;; rax, rdx = rax / 10, rax % 10
@@ -99,8 +103,5 @@ output_write:
     mov     rsi, rsp
     mov     rdx, r14
     syscall
-
-exit:
-    mov     rax, SYS_EXIT
-    mov     rdi, 0
-    syscall
+    add     rsp, r14
+    ret
