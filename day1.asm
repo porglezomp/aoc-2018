@@ -9,8 +9,10 @@ global start
 
 section .text
 start:
-    ;; We allocate space on the stack for reading the data into
+    ;; We allocate space on the stack for reading the data into.
+    ;; We make it 8 bytes so we can use it with full width arithmetic.
     sub     rsp, 8
+    mov     r12, rsp
     ;; r15 holds the total so far
     mov     r15, 0
 
@@ -21,26 +23,26 @@ read_sign:
     ;; Read the sign
     mov     rax, SYS_READ
     mov     rdi, STDIN
-    mov     rsi, rsp
+    mov     rsi, r12
     mov     rdx, 1
     syscall
     ;; If we reached EOF, go to output
     cmp     eax, 0
     je      output
     ;; Store the sign in r13
-    mov     r13, [rsp]
+    mov     r13, [r12]
 read_digit:
     mov     rax, SYS_READ
     mov     rdi, STDIN
-    mov     rsi, rsp
+    mov     rsi, r12
     mov     rdx, 1
     syscall
     ;; If we see '\n', we can stop reading digits
-    cmp     byte [rsp], NEWLINE
+    cmp     byte [r12], NEWLINE
     je      add
     ;; r14 = r14 * 10 + (digit - '0')
     imul    r14, r14, 10
-    add     r14, [rsp]
+    add     r14, [r12]
     sub     r14, '0'
     jmp     read_digit
 
