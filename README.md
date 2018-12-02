@@ -5,13 +5,14 @@ Following [an idea from @chordbug on twitter][tweet], I'll be doing Advent of Co
 [tweet]: https://twitter.com/chordbug/status/1068321394897899520
 
 - Day 1: x86 assembly. (x86-64, macOS system calls)
+- Day 2: J.
 
 ## Languages to Use?
 
 I need 25 languages, here are some ones that I could use:
 
 - [ ] Agda
-- [ ] APL (J?)
+- [x] APL (J?)
 - [ ] ATS
 - [x] Assembly
 - [ ] BASIC
