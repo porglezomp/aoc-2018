@@ -1,9 +1,12 @@
 SYS_EXIT: equ   0x2000001
 SYS_READ: equ   0x2000003
 SYS_WRITE: equ  0x2000004
+SYS_MMAP: equ   0x20000C5
 STDIN: equ      0
 STDOUT: equ     1
 NEWLINE: equ    10
+MEM_RW: equ     0x03
+MEM_FLAGS: equ  0x1001 ;; MAP_ANON | MAP_SHARED
 
 global start
 
@@ -55,16 +58,49 @@ skip_neg:
 
 ;; Compute the sum!
 compute_sum:
-    mov     r15, 0
+    mov     rax, 0
+    mov     r11, rsp
 add_num:
-    pop     r14
-    add     r15, r14
-    cmp     rsp, r12
-    jne     add_num
-
-;; Print out the final result
+    add     rax, [r11]
+    add     r11, 8
+    cmp     r11, r12
+    jl      add_num
 output:
-    mov     rax, r15
+    call    output_number
+
+;; Find the repeated number!
+allocate_set:
+    mov     rax, SYS_MMAP
+    ;; rdi, rsi, rdx, r10, r8, r9
+    ;; mmap(void *addr, size_t len, int prot, int flags, int fd, off_t offset)
+    mov     rdi, 0
+    mov     rsi, 0x100000000  ;; lazy allocation! it's fine to ask for 4GB!
+    mov     rdx, MEM_RW
+    mov     r10, MEM_FLAGS
+    mov     r8, -1
+    mov     r9, 0
+    syscall
+    mov     r13, 0x080000000
+    add     r13, rax
+
+;; Repeatedly scans through the numbers, marking values in the set.
+find_repeated_number:
+    mov     rax, 0
+    mov     byte [r13], 1
+find_repeat:
+    mov     r11, r12
+scan:
+    sub     r11, 8
+    add     rax, [r11]
+    ;; Stop if we find set[sum] != 0
+    cmp     byte [r13 + rax], 0
+    jne     found_repeated_number
+    mov     byte [r13 + rax], 1
+    cmp     r11, rsp
+    jle     find_repeat
+    jmp     scan
+
+found_repeated_number:
     call    output_number
 
 exit:
@@ -74,6 +110,11 @@ exit:
 
 ;; Prints the number it gets from rax to stdout
 output_number:
+    push    rax
+    push    r10
+    push    r11
+    push    r14
+    push    r15
     ;; r14 stores the length of the output buffer
     mov     r14, 1
     mov     r15, rax
@@ -113,4 +154,9 @@ output_write:
     mov     rdx, r14
     syscall
     add     rsp, r14
+    pop     r15
+    pop     r14
+    pop     r11
+    pop     r10
+    pop     rax
     ret
