@@ -6,13 +6,13 @@ Following [an idea from @chordbug on twitter][tweet], I'll be doing Advent of Co
 
 - Day 1: x86 assembly. (x86-64, macOS system calls)
 - Day 2: J.
+- Day 3: SQL.
 
 ## Languages to Use?
 
 I need 25 languages, here are some ones that I could use:
 
 - [ ] Agda
-- [x] APL (J?)
 - [ ] ATS
 - [x] Assembly
 - [ ] BASIC
@@ -27,6 +27,7 @@ I need 25 languages, here are some ones that I could use:
 - [ ] Go
 - [ ] Haskell
 - [ ] Idris
+- [x] J
 - [ ] Java
 - [ ] JavaScript
 - [ ] Lua
@@ -42,4 +43,5 @@ I need 25 languages, here are some ones that I could use:
 - [ ] Scheme
 - [ ] Shell
 - [ ] Smalltalk
+- [x] SQL
 - [ ] Swift
