@@ -15,9 +15,15 @@ SELECT CAST(SUBSTR(s, INSTR(s, '#') + 1, INSTR(s, '@') - INSTR(s, '#') - 2) AS I
        CAST(SUBSTR(s, INSTR(s, 'x') + 1) AS INTEGER) as height
 FROM strings;
 
+-- Generate a range from 0-1000
+CREATE TABLE inches (inch INTEGER);
+WITH range(inch) AS (SELECT 1 UNION ALL SELECT inch+1 FROM range LIMIT 1000)
+INSERT INTO inches (inch) SELECT inch FROM range;
+
+CREATE INDEX inch_index ON inches (inch);
+
 -- Count the points covered by more than one claim
 SELECT COUNT(*) FROM (
-WITH inches(inch) AS (SELECT 1 UNION ALL SELECT inch+1 FROM inches LIMIT 1000)
 SELECT id, x.inch as x, y.inch as y FROM claims
   JOIN inches as x JOIN inches as y
   WHERE x.inch BETWEEN claims.left AND claims.left + claims.width - 1
