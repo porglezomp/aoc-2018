@@ -14,12 +14,13 @@ SELECT CAST(SUBSTR(str, INSTR(str, '#') + 1, INSTR(str, '@') - INSTR(str, '#') -
        CAST(SUBSTR(str, INSTR(str, 'x') + 1) AS INTEGER) as height
 FROM strings;
 
-SELECT COUNT(*) FROM (
+CREATE TABLE points (id INTEGER, x INTEGER, y INTEGER);
+
 WITH inches(inch) AS (SELECT 1 UNION ALL SELECT inch+1 FROM inches LIMIT 1000)
-SELECT * FROM claims
+INSERT INTO points (id, x, y)
+SELECT id, x.inch as x, y.inch as y FROM claims
   JOIN inches as x JOIN inches as y
   WHERE x.inch BETWEEN claims.left AND claims.left + claims.width - 1
-    AND y.inch BETWEEN claims.top AND claims.top + claims.height - 1
-  GROUP BY x.inch, y.inch
-  HAVING COUNT(id) > 1
-);
+    AND y.inch BETWEEN claims.top AND claims.top + claims.height - 1;
+
+SELECT COUNT(*) FROM (SELECT * FROM points GROUP BY x, y HAVING COUNT(id) > 1);
