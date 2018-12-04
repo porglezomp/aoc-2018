@@ -15,26 +15,20 @@ SELECT CAST(SUBSTR(s, INSTR(s, '#') + 1, INSTR(s, '@') - INSTR(s, '#') - 2) AS I
        CAST(SUBSTR(s, INSTR(s, 'x') + 1) AS INTEGER) as height
 FROM strings;
 
-CREATE TABLE points (id INTEGER, x INTEGER, y INTEGER);
-
--- All points
+-- Count the points covered by more than one claim
+SELECT COUNT(*) FROM (
 WITH inches(inch) AS (SELECT 1 UNION ALL SELECT inch+1 FROM inches LIMIT 1000)
-INSERT INTO points (id, x, y)
 SELECT id, x.inch as x, y.inch as y FROM claims
   JOIN inches as x JOIN inches as y
   WHERE x.inch BETWEEN claims.left AND claims.left + claims.width - 1
-    AND y.inch BETWEEN claims.top AND claims.top + claims.height - 1;
+    AND y.inch BETWEEN claims.top AND claims.top + claims.height - 1
+  GROUP BY x, y HAVING COUNT(id) > 1
+);
 
-CREATE INDEX points_by_id ON points (id);
-CREATE INDEX points_by_loc ON points (x, y);
-
--- Count the points covered by more than one entry
-SELECT COUNT(*) FROM (SELECT * FROM points GROUP BY x, y HAVING COUNT(id) > 1);
-
--- Find the id such that all points for that id are not contained in any other claim
-SELECT id FROM points AS p
+-- Find a claim such that there is no other claim that overlaps it
+SELECT id FROM claims AS a
   WHERE NOT EXISTS
-    (SELECT * FROM points AS a JOIN points AS b
-      WHERE a.id <> p.id AND b.id = p.id
-        AND a.x = b.x AND a.y = b.y)
-  LIMIT 1;
+    (SELECT * FROM claims AS b
+      WHERE a.id <> b.id
+        AND NOT (  a.left > b.left + b.width OR a.left + a.width < b.left
+                 OR a.top > b.top + b.height OR a.top + a.height < b.top));
