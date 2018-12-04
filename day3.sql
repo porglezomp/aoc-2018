@@ -25,5 +25,16 @@ SELECT id, x.inch as x, y.inch as y FROM claims
   WHERE x.inch BETWEEN claims.left AND claims.left + claims.width - 1
     AND y.inch BETWEEN claims.top AND claims.top + claims.height - 1;
 
+CREATE INDEX points_by_id ON points (id);
+CREATE INDEX points_by_loc ON points (x, y);
+
 -- Count the points covered by more than one entry
 SELECT COUNT(*) FROM (SELECT * FROM points GROUP BY x, y HAVING COUNT(id) > 1);
+
+-- Find the id such that all points for that id are not contained in any other claim
+SELECT id FROM points AS p
+  WHERE NOT EXISTS
+    (SELECT * FROM points AS a JOIN points AS b
+      WHERE a.id <> p.id AND b.id = p.id
+        AND a.x = b.x AND a.y = b.y)
+  LIMIT 1;
