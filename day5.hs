@@ -1,9 +1,18 @@
 import Data.Char (toLower, isSpace)
 
+canReact :: Char -> Char -> Bool
+canReact x y = toLower x == toLower y && x /= y
+
+reactHead :: String -> String
+reactHead (y : x : xs)
+  | canReact y x = xs
+  | otherwise = y : x : xs
+reactHead xs = xs
+
 react :: String -> String
 react (y : x : xs)
-  | toLower x == toLower y && x /= y = react xs
-  | otherwise = y : react (x : xs)
+  | canReact y x = react xs
+  | otherwise = reactHead (y : react (x : xs))
 react xs = xs
 
 fixed :: Eq a => (a -> a) -> a -> a
