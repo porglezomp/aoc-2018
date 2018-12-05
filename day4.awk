@@ -1,7 +1,7 @@
-/Guard/ { guard = $4; sleep = none }
-/falls asleep/ { sleep = substr($2, 4, 2) }
+/Guard/ { guard = substr($4, 2) }
+/falls asleep/ { sleep = substr($2, 4, 2) + 0 }
 /wakes up/ {
-    wake = substr($2, 4, 2)
+    wake = substr($2, 4, 2) + 0
     sleep_time[guard] += wake - sleep
     for (time = sleep; time < wake; time++) {
         asleep[guard, time]++
@@ -19,11 +19,21 @@ END {
         }
     }
 
-    best_time = 0
+    max_minute = 0
     for (minute = 0; minute < 60; minute++) {
-        if (asleep[max_guard, minute] >= asleep[max_guard, best_time]) {
-            best_time = minute
+        if (asleep[max_guard, minute] > asleep[max_guard, max_minute]) {
+            max_minute = minute
         }
     }
-    print substr(max_guard, 2) * best_time
+    print max_guard * max_minute
+
+    for (guard in sleep_time) {
+        for (minute = 0; minute < 60; minute++) {
+            if (asleep[guard, minute] > asleep[max_guard, max_minute]) {
+                max_guard = guard
+                max_minute = minute
+            }
+        }
+    }
+    print max_guard * max_minute
 }
