@@ -1,4 +1,6 @@
 import Data.Char (toLower, isSpace)
+import Data.Set (Set)
+import qualified Data.Set as Set
 
 canReact :: Char -> Char -> Bool
 canReact x y = toLower x == toLower y && x /= y
@@ -21,5 +23,9 @@ fixed f x = let y = f x in
 
 main :: IO ()
 main = do
-  text <- filter (not . isSpace) <$> getContents
-  print . length $ fixed react text
+  polymer <- filter (not . isSpace) <$> getContents
+  print . length $ fixed react polymer
+  let units = foldl (flip (Set.insert . toLower)) Set.empty polymer
+  print . minimum $ [length $ fixed react p |
+                     u <- Set.toList units,
+                     let p = filter ((/= u) . toLower) polymer]
