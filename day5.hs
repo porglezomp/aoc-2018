@@ -1,3 +1,4 @@
+import Control.Monad.State.Strict (State, get, put, runState)
 import Data.Char (toLower, isSpace)
 import Data.Set (Set)
 import qualified Data.Set as Set
@@ -5,21 +6,22 @@ import qualified Data.Set as Set
 canReact :: Char -> Char -> Bool
 canReact x y = toLower x == toLower y && x /= y
 
-reactHead :: String -> String
+reactHead :: String -> State Bool String
 reactHead (y : x : xs)
-  | canReact y x = xs
-  | otherwise = y : x : xs
-reactHead xs = xs
+  | canReact y x = put True *> pure xs
+  | otherwise = pure $ y : x : xs
+reactHead xs = pure xs
 
-react :: String -> String
+react :: String -> State Bool String
 react (y : x : xs)
-  | canReact y x = react xs
-  | otherwise = reactHead (y : react (x : xs))
-react xs = xs
+  | canReact y x = react xs <* put True
+  | otherwise = react (x : xs) >>= reactHead . (y :)
+react xs = pure xs
 
-fixed :: Eq a => (a -> a) -> a -> a
-fixed f x = let y = f x in
-    if y == x then y else fixed f y
+fixed :: (a -> State Bool a) -> a -> a
+fixed f x =
+    let (y, changed) = runState (f x) False in
+    if changed then fixed f y else y
 
 main :: IO ()
 main = do
