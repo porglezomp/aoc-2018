@@ -1,11 +1,9 @@
-readfile =: 1!:1
 unwords =: <;._2
-
 cart =: (<@,"0)/
 repeats =: [: +/"1 =
 hasrep =: e. repeats
 
-words =: > unwords readfile < 'input/day2'
+words =: > unwords fread < 'input/day2'
 distances =: +/"1 -. ="1/~ words
 NB. Thanks to Lynn for helping me figure this one out
 similar =: > {. (, distances = 1) # (, cart~ <"1 words)
