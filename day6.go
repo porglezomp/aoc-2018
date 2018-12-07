@@ -35,6 +35,23 @@ func (p point) distance(other point) int {
 	return abs(dx) + abs(dy)
 }
 
+func (p point) distanceAll(points []point) int {
+	total := 0
+	for _, other := range points {
+		total += p.distance(other)
+	}
+	return total
+}
+
+func (p point) neighbors() [4]point {
+	return [4]point{
+		point{x: p.x - 1, y: p.y},
+		point{x: p.x + 1, y: p.y},
+		point{x: p.x, y: p.y - 1},
+		point{x: p.x, y: p.y + 1},
+	}
+}
+
 func readPoints() []point {
 	// Read in the points
 	var p point
@@ -119,4 +136,29 @@ func main() {
 		}
 	}
 	fmt.Printf("%d\n", maxArea)
+
+	// Part 2
+	CUTOFF := 10000
+	safeArea := 0
+	next := append([]point(nil), points...)
+	visited := make(map[point]bool)
+	for _, point := range points {
+		visited[point] = true
+	}
+
+	for len(next) != 0 {
+		point := next[len(next)-1]
+		next = next[:len(next)-1]
+		if point.distanceAll(points) >= CUTOFF {
+			continue
+		}
+		safeArea++
+		for _, neighbor := range point.neighbors() {
+			if !visited[neighbor] {
+				visited[neighbor] = true
+				next = append(next, neighbor)
+			}
+		}
+	}
+	fmt.Printf("%d\n", safeArea)
 }
