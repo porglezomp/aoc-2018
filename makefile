@@ -1,5 +1,5 @@
-latest: day5
-all: day1 day2 day3 day4 day5
+latest: day6
+all: day1 day2 day3 day4 day5 day6
 
 day1: day1.exe input/day1
 	./day1.exe < input/day1
@@ -15,6 +15,9 @@ day4: day4.awk input/day4
 
 day5: day5.exe input/day5
 	./day5.exe < input/day5
+
+day6: day6.go input/day6
+	go run day6.go < input/day6
 
 day1.exe: day1.asm
 	nasm -f macho64 day1.asm -o day1.o

@@ -9,6 +9,7 @@ Following [an idea from @chordbug on twitter][tweet], I'll be doing Advent of Co
 - Day 3: SQL.
 - Day 4: Awk.
 - Day 5: Haskell.
+- Day 6: Go.
 
 ## Languages to Use?
 
@@ -27,7 +28,7 @@ I need 25 languages, here are some ones that I could use:
 - [ ] Erlang
 - [ ] F#
 - [ ] Forth
-- [ ] Go
+- [x] Go
 - [x] Haskell
 - [ ] Idris
 - [x] J
