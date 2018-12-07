@@ -16,8 +16,8 @@ day4: day4.awk input/day4
 day5: day5.exe input/day5
 	./day5.exe < input/day5
 
-day6: day6.go input/day6
-	go run day6.go < input/day6
+day6: day6.exe input/day6
+	./day6.exe < input/day6
 
 day1.exe: day1.asm
 	nasm -f macho64 day1.asm -o day1.o
@@ -25,6 +25,9 @@ day1.exe: day1.asm
 
 day5.exe: day5.hs
 	ghc $< -o $@ -O2
+
+day6.exe: day6.go
+	go build -o $@ $<
 
 clean:
 	rm -f *.exe *.o *.hi
