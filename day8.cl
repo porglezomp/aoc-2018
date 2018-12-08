@@ -13,4 +13,15 @@
   (+ (loop for meta in (meta-tree-meta tree) summing meta)
      (loop for child in (meta-tree-children tree) summing (sum-tree child))))
 
-(format t "~d~%" (sum-tree (read-tree *standard-input*)))
+(defun checksum (tree)
+  (let ((children (meta-tree-children tree)))
+    (if (null children)
+      (sum-tree tree)
+      (loop
+        for meta in (meta-tree-meta tree)
+        for child = (nth (- meta 1) children)
+        when child sum (checksum child)))))
+
+(let ((tree (read-tree *standard-input*)))
+  (format t "~d~%" (sum-tree tree))
+  (format t "~d~%" (checksum tree)))
