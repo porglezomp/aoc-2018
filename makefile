@@ -22,6 +22,11 @@ day6: day6.exe input/day6
 day7: day7.pl input/day7
 	swipl day7.pl
 
+day7.dot: day7
+
+day7.svg: day7.dot
+	dot $< -Tsvg > $@
+
 day1.exe: day1.asm
 	nasm -f macho64 day1.asm -o day1.o
 	ld -macosx_version_min 10.7.0 -lSystem -o $@ day1.o
@@ -34,3 +39,4 @@ day6.exe: day6.go
 
 clean:
 	rm -f *.exe *.o *.hi
+	rm -f day7.dot day7.svg

@@ -1,3 +1,5 @@
 *.exe
 *.o
 *.hi
+day7.dot
+day7.svg

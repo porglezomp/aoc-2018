@@ -38,14 +38,16 @@ toposort(Xs, [H|T]) :-
    findall(X, task(X), Tasks), !,
    toposort(Tasks, Sorted),
    string_codes(Message, Sorted),
-   writeln(Message),
-   halt.
+   writeln(Message).
 
-% write_edge([Os, A, B]) :-
-%   write(Os, "  "), write(Os, A), write(Os, " -> "), writeln(Os, B).
-%
-% ?- open("day7.dot", write, Os),
-%    findall([Os, A, B], before(A, B), Xs),
-%    writeln(Os, "digraph G {"),
-%    maplist(write_edge, Xs),
-%    writeln(Os, "}").
+% Generate a graphviz file for the input
+write_edge([Os, A, B]) :-
+  write(Os, "  "), write(Os, A), write(Os, " -> "), writeln(Os, B).
+
+?- open("day7.dot", write, Os),
+   findall([Os, A, B], before(A, B), Xs),
+   writeln(Os, "digraph G {"),
+   maplist(write_edge, Xs),
+   writeln(Os, "}").
+
+?- halt.
