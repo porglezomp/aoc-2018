@@ -5,23 +5,12 @@
 
 use_module(library(readutil)).
 
-read_lines(Stream, []) :- at_end_of_stream(Stream).
-read_lines(Stream, [Line|Lines]) :-
-   read_line_to_codes(Stream, Line, _),
-   read_lines(Stream, Lines).
-
-% Step Y must be finished before step L can begin.
-% 0    *    1         2         3     *
-% 0123456789012345678901234567890123456
-add_relation([
-   83,116,101,112,32,A,32,109,117,115,
-   116,32,98,101,32,102,105,110,105,115,
-   104,101,100,32,98,101,102,111,114,101,
-   32,115,116,101,112,32,B,32,99,97,
-   110,32,98,101,103,105,110,46,10]) :-
-   assert(before(A, B)),
-   (task(A) ; assert(task(A))),
-   (task(B) ; assert(task(B))).
+read_input -->
+   "Step ", [A], " must be finished before step ", [B], " can begin.\n",
+   { assertz(before(A, B)),
+     (task(A) ; assertz(task(A))),
+     (task(B) ; assertz(task(B))) },
+   (read_input ; { true }).
 
 has_prec(Ls, X) :- member(Y, Ls), before(Y, X).
 next_task(Pending, Tasks, T, Rest) :-
@@ -56,24 +45,20 @@ work_queue(NumWorkers, Pending, Tasks, Jobs, Time, TOut, [X|T]) :-
    NextTime is Time + N,
    work_queue(NumWorkers, NowPending, NewTasks, WorkedJobs, NextTime, TOut, T).
 
-?- open('input/day7', read, Stream),
-   read_lines(Stream, Lines),
-   maplist(add_relation, Lines),
-   findall(X, task(X), Tasks), !,
-   toposort(Tasks, Sorted),
-   string_codes(Message, Sorted),
-   writeln(Message), !,
-   work_queue(5, Tasks, Tasks, [], 0, Time, _),
-   writeln(Time).
-
 % Generate a graphviz file for the input
-write_edge([Os, A, B]) :-
-   write(Os, "  "), write(Os, A), write(Os, " -> "), writeln(Os, B).
-
-?- open("day7.dot", write, Os),
-   findall([Os, A, B], before(A, B), Xs),
+write_graph(Filename) :-
+   open(Filename, write, Os),
+   findall([A, B], before(A, B), Xs),
    writeln(Os, "digraph G {"),
-   maplist(write_edge, Xs),
+   maplist(format(Os, "  ~c -> ~c~n"), Xs),
    writeln(Os, "}").
 
-?- halt.
+?- phrase_from_file(read_input, 'input/day7'),
+   write_graph("day7.dot"),
+   findall(X, task(X), Tasks),
+   toposort(Tasks, Sorted),
+   string_codes(Message, Sorted),
+   writeln(Message),
+   work_queue(5, Tasks, Tasks, [], 0, Time, _),
+   writeln(Time),
+   halt.
