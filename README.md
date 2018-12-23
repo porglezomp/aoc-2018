@@ -13,6 +13,9 @@ Following [an idea from @chordbug on twitter][tweet], I'll be doing Advent of Co
 - Day 7: SWI Prolog.
 - Day 8: SBCL.
 - Day 9: C#.
+- Day 10: [Chipmunk Basic].
+
+[chipmunk basic]: http://www.nicholson.com/rhn/basic/
 
 ## Languages to Use?
 
@@ -22,7 +25,7 @@ I need 25 languages, here are some ones that I could use:
 - [ ] ATS
 - [x] Assembly
 - [x] Awk
-- [ ] BASIC
+- [x] BASIC
 - [ ] C
 - [ ] C++
 - [x] C#
