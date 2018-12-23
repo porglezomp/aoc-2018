@@ -1,5 +1,5 @@
-latest: day9
-all: day1 day2 day3 day4 day5 day6 day7 day8 day9
+latest: day10
+all: day1 day2 day3 day4 day5 day6 day7 day8 day9 day10
 
 day1: day1.exe input/day1
 	./day1.exe < input/day1
@@ -27,6 +27,10 @@ day8: day8.cl input/day8
 
 day9: day9.exe input/day9
 	mono day9.exe < input/day9
+
+# Chipmunk Basic http://www.nicholson.com/rhn/basic/
+day10: day10.bas input/day10
+	chipmunk day10.bas < input/day10
 
 day1.exe: day1.asm
 	nasm -f macho64 day1.asm -o day1.o
