@@ -11,6 +11,7 @@ Following [an idea from @chordbug on twitter][tweet], I'll be doing Advent of Co
 - Day 5: Haskell.
 - Day 6: Go.
 - Day 7: SWI Prolog.
+- Day 8: SBCL.
 
 ## Languages to Use?
 
@@ -24,7 +25,7 @@ I need 25 languages, here are some ones that I could use:
 - [ ] C
 - [ ] C++
 - [ ] C#
-- [ ] Common Lisp
+- [x] Common Lisp
 - [ ] D
 - [ ] Erlang
 - [ ] F#
