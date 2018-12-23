@@ -1,5 +1,5 @@
 latest: day8
-all: day1 day2 day3 day4 day5 day6 day8
+all: day1 day2 day3 day4 day5 day6 day7 day8
 
 day1: day1.exe input/day1
 	./day1.exe < input/day1
@@ -19,6 +19,9 @@ day5: day5.exe input/day5
 day6: day6.exe input/day6
 	./day6.exe < input/day6
 
+day7: day7.pl input/day7
+	swipl day7.pl
+
 day8: day8.cl input/day8
 	sbcl --script day8.cl < input/day8
 
@@ -31,6 +34,12 @@ day5.exe: day5.hs
 
 day6.exe: day6.go
 	go build -o $@ $<
+  
+day7.dot: day7
+
+day7.svg: day7.dot
+	dot $< -Tsvg > $@
 
 clean:
 	rm -f *.exe *.o *.hi
+	rm -f day7.dot day7.svg
