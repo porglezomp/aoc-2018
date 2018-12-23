@@ -4,17 +4,27 @@ Following [an idea from @chordbug on twitter][tweet], I'll be doing Advent of Co
 
 [tweet]: https://twitter.com/chordbug/status/1068321394897899520
 
-- Day 1: x86 assembly. (x86-64, macOS system calls)
-- Day 2: J.
-- Day 3: SQL.
-- Day 4: Awk.
-- Day 5: Haskell.
-- Day 6: Go.
-- Day 7: SWI Prolog.
-- Day 8: SBCL.
-- Day 9: C#.
+- Day 1: x86 assembly. (x86-64, [macOS system calls])
+- Day 2: [J].
+- Day 3: [SQL]. ([sqlite])
+- Day 4: [Awk].
+- Day 5: [Haskell].
+- Day 6: [Go].
+- Day 7: [SWI Prolog].
+- Day 8: [SBCL].
+- Day 9: [C#].
 - Day 10: [Chipmunk Basic].
 
+[macos system calls]: https://stackoverflow.com/questions/48845697/macos-64-bit-system-call-table
+[j]: http://www.jsoftware.com/
+[sql]: https://en.wikipedia.org/wiki/SQL
+[sqlite]: https://www.sqlite.org/index.html
+[awk]: https://en.wikipedia.org/wiki/AWK
+[haskell]: https://www.haskell.org/
+[go]: https://golang.org/
+[swi prolog]: http://www.swi-prolog.org/
+[sbcl]: http://www.sbcl.org/
+[c#]: https://www.mono-project.com/
 [chipmunk basic]: http://www.nicholson.com/rhn/basic/
 
 ## Languages to Use?
