@@ -45,7 +45,7 @@ I need 25 languages, here are some ones that I could use:
 - [ ] D
 - [ ] Erlang
 - [ ] F#
-- [ ] Forth
+- [x] Forth
 - [x] Go
 - [x] Haskell
 - [ ] Idris
