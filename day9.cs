@@ -36,25 +36,14 @@ class MarbleGame {
 }
 
 struct CircularListNode<T> {
-    public T Value {
-        get { return Node.Value; }
-        set { Node.Value = value; }
-    }
-    public CircularListNode<T> Next {
-        get { return Node.Next ?? Node.List.First; }
-    }
-    public CircularListNode<T> Previous {
-        get { return Node.Previous ?? Node.List.Last; }
-    }
+    public T Value => Node.Value;
+    public CircularListNode<T> Next => Node.Next ?? Node.List.First;
+    public CircularListNode<T> Previous => Node.Previous ?? Node.List.Last;
     public LinkedListNode<T> Node { get; }
+    public CircularListNode(LinkedListNode<T> node) => Node = node;
 
-    public CircularListNode(LinkedListNode<T> node) {
-        this.Node = node;
-    }
-
-    public static implicit operator CircularListNode<T>(LinkedListNode<T> node) {
-        return new CircularListNode<T>(node);
-    }
+    public static implicit operator CircularListNode<T>(LinkedListNode<T> node)
+        => new CircularListNode<T>(node);
 
     public CircularListNode<T> Retreat(uint steps) {
         var node = this;
